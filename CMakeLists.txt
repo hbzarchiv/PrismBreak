@@ -28,17 +28,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 11)
 include(GenerateExportHeader)
 if(MSVC)
-    # /GS Adds buffer security checks, default on but incuded anyway to mirror gcc's fstack-protector flag
+    # /GS Adds buffer security checks, default on but included anyway to mirror gcc's fstack-protector flag
     # /permissive- specify standards-conforming compiler behavior, also enabled by Qt6, default on with std:c++20
-    # Use /W4 as /Wall includes unnesserey warnings such as added padding to structs
+    # Use /W4 as /Wall includes unnecessary warnings such as added padding to structs
     set(CMAKE_CXX_FLAGS "/GS /permissive- /W4 ${CMAKE_CXX_FLAGS}")
 
-    # LINK accepts /SUBSYSTEM whics sets if we are a WINDOWS (gui) or a CONSOLE programs
+    # LINK accepts /SUBSYSTEM which sets if we are a WINDOWS (gui) or a CONSOLE programs
     # This implicitly selects an entrypoint specific to the subsystem selected
     # qtmain/QtEntryPointLib provides the correct entrypoint (wWinMain) for gui programs
-    # Additinaly LINK autodetects we use a GUI so we can omit /SUBSYSTEM
-    # This allows tests to still use have console without using seperate linker flags
-    # /LTCG allows for linking wholy optimizated programs
+    # Additionally LINK autodetects we use a GUI so we can omit /SUBSYSTEM
+    # This allows tests to still use have console without using separate linker flags
+    # /LTCG allows for linking wholly optimized programs
     # /MANIFEST:NO disables generating a manifest file, we instead provide our own
     # /STACK sets the stack reserve size, ATL's pack list needs 3-4 MiB as of November 2022, provide 8 MiB
     set(CMAKE_EXE_LINKER_FLAGS "/LTCG /MANIFEST:NO /STACK:8388608 ${CMAKE_EXE_LINKER_FLAGS}")
