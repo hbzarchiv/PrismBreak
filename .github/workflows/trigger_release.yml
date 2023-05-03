@@ -33,10 +33,7 @@ jobs:
           echo "VERSION=$tag_name" >> $GITHUB_ENV
       - name: Package artifacts properly
         run: |
-          mv ${{ github.workspace }}/PrismLauncher-source PrismLauncher-${{ env.VERSION }}
-          mv PrismLauncher-Linux-Qt6-Portable*/PrismLauncher-portable.tar.gz PrismLauncher-Linux-Qt6-Portable-${{ env.VERSION }}.tar.gz
-          mv PrismLauncher-Linux-Qt6*/PrismLauncher.tar.gz PrismLauncher-Linux-Qt6-${{ env.VERSION }}.tar.gz          
-          mv PrismLauncher-*.AppImage/PrismLauncher-*.AppImage PrismLauncher-Linux-${{ env.VERSION }}-x86_64.AppImage
+          mv ${{ github.workspace }}/PrismLauncher-source PrismLauncher-${{ env.VERSION }}    
           mv PrismLauncher-macOS*/PrismLauncher.tar.gz PrismLauncher-macOS-${{ env.VERSION }}.tar.gz
 
           tar -czf PrismLauncher-${{ env.VERSION }}.tar.gz PrismLauncher-${{ env.VERSION }}
@@ -67,9 +64,6 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            PrismLauncher-Linux-${{ env.VERSION }}-x86_64.AppImage
-            PrismLauncher-Linux-Qt6-${{ env.VERSION }}.tar.gz
-            PrismLauncher-Linux-Qt6-Portable-${{ env.VERSION }}.tar.gz
             PrismLauncher-Windows-MSVC-${{ env.VERSION }}.zip
             PrismLauncher-Windows-MSVC-Portable-${{ env.VERSION }}.zip
             PrismLauncher-Windows-MSVC-Setup-${{ env.VERSION }}.exe
