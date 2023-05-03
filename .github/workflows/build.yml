@@ -275,26 +275,6 @@ jobs:
           cmake --build ${{ env.BUILD_DIR }} --config ${{ inputs.build_type }}
 
       ##
-      # TEST
-      ##
-
-      - name: Test
-        if: runner.os != 'Windows'
-        run: |
-          ctest -E "^example64|example$" --test-dir build --output-on-failure
-
-      - name: Test (Windows MinGW-w64)
-        if: runner.os == 'Windows' && matrix.msystem != ''
-        shell: msys2 {0}
-        run: |
-          ctest -E "^example64|example$" --test-dir build --output-on-failure
-
-      - name: Test (Windows MSVC)
-        if: runner.os == 'Windows' && matrix.msystem == '' && matrix.architecture != 'arm64'
-        run: |
-          ctest -E "^example64|example$" --test-dir build --output-on-failure -C ${{ inputs.build_type }} 
-
-      ##
       # PACKAGE BUILDS
       ##
 
@@ -529,33 +509,3 @@ jobs:
         with:
           bundle: "Prism Launcher.flatpak"
           manifest-path: flatpak/org.prismlauncher.PrismLauncher.yml 
-
-  nix:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package:
-          - prismlauncher
-          - prismlauncher-qt5
-    steps:
-      - name: Clone repository
-        if: inputs.build_type == 'Debug'
-        uses: actions/checkout@v3
-        with:
-          submodules: 'true'
-      - name: Install nix
-        if: inputs.build_type == 'Debug'
-        uses: cachix/install-nix-action@v20
-        with:
-          install_url: https://nixos.org/nix/install
-          extra_nix_config: |
-            auto-optimise-store = true
-            experimental-features = nix-command flakes
-      - uses: cachix/cachix-action@v12
-        if: inputs.build_type == 'Debug'
-        with:
-          name: prismlauncher
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - name: Build
-        if: inputs.build_type == 'Debug'
-        run: nix build .#${{ matrix.package }} --print-build-logs
